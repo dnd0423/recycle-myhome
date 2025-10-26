@@ -23,6 +23,8 @@ dependencies:
   pedantic_mono: ^1.34.0
   http: ^1.5.0
 
+  table_calendar: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

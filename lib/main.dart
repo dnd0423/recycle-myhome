@@ -1,59 +1,59 @@
-import 'dart:async';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:template/core/controllers/theme_controller.dart';
-import 'package:template/core/themes/app_theme.dart';
-import 'package:template/features/todo/screens/sample_screen.dart';
-import 'package:template/setup.dart';
+import 'features/screens/home_screen.dart';
+import 'features/screens/calendar_screen.dart';
+import 'features/screens/schedule_screen.dart';
 
-/// 앱 시작점
 void main() {
-  runZonedGuarded<Future<void>>(
-    () async {
-      // Flutter 바인딩 초기화
-      WidgetsFlutterBinding.ensureInitialized();
-      // 외부 서비스 초기화
-      await AppSetup.initialize();
-      // 다국어 지원 초기화
-      await EasyLocalization.ensureInitialized();
-      // Google Fonts 초기화
-      await GoogleFonts.pendingFonts();
-
-      runApp(
-        // Riverpod 및 EasyLocalization 설정
-        EasyLocalization(
-          supportedLocales: const [Locale('ko'), Locale('en')],
-          path: 'assets/translations',
-          fallbackLocale: const Locale('ko'),
-          child: const ProviderScope(child: MyApp()),
-        ),
-      );
-    },
-    AppSetup.handleZoneError,
-  );
+  runApp(const GarbageApp());
 }
 
-/// 앱의 루트 위젯
-class MyApp extends ConsumerWidget {
-  /// MyApp 생성자
-  const MyApp({super.key});
+class GarbageApp extends StatelessWidget {
+  const GarbageApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeControllerProvider);
-
+  Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Blueberry Template',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: themeMode,
-      locale: context.locale,
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
-      home: const SampleScreen(),
+      debugShowCheckedModeBanner: false,
+      title: 'Garbage Schedule',
+      theme: ThemeData(primarySwatch: Colors.green),
+      home: const MainNavigation(),
+    );
+  }
+}
+
+class MainNavigation extends StatefulWidget {
+  const MainNavigation({super.key});
+
+  @override
+  State<MainNavigation> createState() => _MainNavigationState();
+}
+
+class _MainNavigationState extends State<MainNavigation> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _screens = const [
+    HomeScreen(),
+    CalendarScreen(),
+    ScheduleScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.green,
+        onTap: (index) => setState(() => _selectedIndex = index),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: '달력',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: '정리표'),
+        ],
+      ),
     );
   }
 }
