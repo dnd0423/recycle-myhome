@@ -57,7 +57,7 @@ class GarbageListCard extends StatelessWidget {
           type,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: const Text('오늘 8시 30분까지 배출해 주세요.'),
+        subtitle: const Text('오늘 아침 8시 30분까지 배출해 주세요.'),
         trailing: const Icon(Icons.check_circle_outline, color: Colors.green),
       ),
     );
